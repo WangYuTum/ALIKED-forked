@@ -1,0 +1,38 @@
+{
+  "timestamp": "2026-05-17T16:16:07.047809",
+  "config": {
+    "model": "aliked-n16rot",
+    "device": "cuda",
+    "image_size": "720x1280",
+    "image_path": "assets/south_building/P1180143.jpg",
+    "runs": 3,
+    "warmup": 3,
+    "memory_tracking": true
+  },
+  "pytorch": {
+    "mean": 0.049912452697753906,
+    "std": 0.003479937374712846,
+    "min": 0.047415733337402344,
+    "max": 0.05483365058898926,
+    "num_keypoints": 5000,
+    "peak_memory_mb": 1454.40478515625
+  },
+  "onnx": {
+    "mean": 0.7158718109130859,
+    "std": 0.011661705104002155,
+    "min": 0.7065930366516113,
+    "max": 0.7323188781738281,
+    "num_keypoints": 5000,
+    "peak_memory_mb": 10.72998046875
+  },
+  "comparison": {
+    "speed_ratio": 0.06972261225664295,
+    "time_difference_ms": 665.959358215332,
+    "faster": "pytorch",
+    "keypoint_difference": 0,
+    "keypoint_difference_pct": 0.0,
+    "memory_ratio": 135.54589306029578,
+    "memory_difference_mb": 1443.6748046875,
+    "less_memory": "onnx"
+  }
+}

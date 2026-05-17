@@ -9,6 +9,8 @@ import logging
 import torch
 import cv2
 import os
+import json
+from datetime import datetime
 from nets.aliked import ALIKED
 from nets.aliked_onnx import ALIKED_ONNX
 
@@ -94,6 +96,8 @@ def main():
                         help='Number of benchmark runs (default: 10)')
     parser.add_argument('--warmup', type=int, default=3,
                         help='Number of warmup runs (default: 3)')
+    parser.add_argument('--output', type=str, default='benchmark_results.json',
+                        help='Output file for benchmark results (default: benchmark_results.json)')
     
     args = parser.parse_args()
     
@@ -233,6 +237,43 @@ def main():
         print(f"\nKeypoints: Difference of {kp_diff} ({kp_diff/pytorch_stats['num_keypoints']*100:.2f}%)")
         
         print("="*80 + "\n")
+    
+    # Save results to file
+    results = {
+        'timestamp': datetime.now().isoformat(),
+        'config': {
+            'model': args.model,
+            'device': args.device,
+            'image_size': f"{h}x{w}",
+            'image_path': args.image if args.image else 'random',
+            'runs': args.runs,
+            'warmup': args.warmup,
+            'memory_tracking': track_memory
+        },
+        'pytorch': pytorch_stats if pytorch_stats else None,
+        'onnx': onnx_stats if onnx_stats else None,
+        'comparison': None
+    }
+    
+    if pytorch_stats and onnx_stats:
+        results['comparison'] = {
+            'speed_ratio': pytorch_stats['mean'] / onnx_stats['mean'],
+            'time_difference_ms': abs(pytorch_stats['mean'] - onnx_stats['mean']) * 1000,
+            'faster': 'onnx' if pytorch_stats['mean'] > onnx_stats['mean'] else 'pytorch',
+            'keypoint_difference': abs(pytorch_stats['num_keypoints'] - onnx_stats['num_keypoints']),
+            'keypoint_difference_pct': abs(pytorch_stats['num_keypoints'] - onnx_stats['num_keypoints']) / pytorch_stats['num_keypoints'] * 100
+        }
+        
+        if track_memory:
+            results['comparison']['memory_ratio'] = pytorch_stats['peak_memory_mb'] / onnx_stats['peak_memory_mb']
+            results['comparison']['memory_difference_mb'] = abs(pytorch_stats['peak_memory_mb'] - onnx_stats['peak_memory_mb'])
+            results['comparison']['less_memory'] = 'onnx' if pytorch_stats['peak_memory_mb'] > onnx_stats['peak_memory_mb'] else 'pytorch'
+    
+    # Save to file
+    with open(args.output, 'w') as f:
+        json.dump(results, f, indent=2)
+    
+    logging.info(f"Results saved to {args.output}")
 
 
 if __name__ == '__main__':

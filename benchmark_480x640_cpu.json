@@ -1,0 +1,35 @@
+{
+  "timestamp": "2026-05-17T16:15:20.312806",
+  "config": {
+    "model": "aliked-n16rot",
+    "device": "cpu",
+    "image_size": "480x640",
+    "image_path": "assets/south_building/P1180143.jpg",
+    "runs": 3,
+    "warmup": 3,
+    "memory_tracking": false
+  },
+  "pytorch": {
+    "mean": 0.34613696734110516,
+    "std": 0.004347370441874624,
+    "min": 0.3427548408508301,
+    "max": 0.35227441787719727,
+    "num_keypoints": 1603,
+    "peak_memory_mb": 0
+  },
+  "onnx": {
+    "mean": 0.2878246307373047,
+    "std": 0.002028835820926597,
+    "min": 0.2854578495025635,
+    "max": 0.29041266441345215,
+    "num_keypoints": 5000,
+    "peak_memory_mb": 0
+  },
+  "comparison": {
+    "speed_ratio": 1.202596756415269,
+    "time_difference_ms": 58.312336603800475,
+    "faster": "onnx",
+    "keypoint_difference": 3397,
+    "keypoint_difference_pct": 211.9151590767311
+  }
+}
