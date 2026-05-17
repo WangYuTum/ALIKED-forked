@@ -1,0 +1,11 @@
+# ONNX Runtime dependencies
+
+# Core ONNX Runtime (choose one):
+onnxscript>=0.7.0          # Required by PyTorch for ONNX export
+# onnxruntime>=1.25.0        # For CPU inference
+onnxruntime-gpu>=1.25.0  # For GPU inference (requires CUDA)
+
+# ONNX tools (optional but recommended):
+onnx>=1.21.0               # ONNX model verification
+# onnx-simplifier>=0.4.0     # Model optimization
+onnxsim>=0.6.3            # ONNX model simplification
